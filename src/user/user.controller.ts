@@ -10,13 +10,19 @@ export class UserController {
 
     // 이메일 중복체크
     @Post('email/check')
-    emailCheck(@Body() data: CheckEmailDto) {
-        return this.userService.emailCheck(data);
+    async emailCheck(@Body() data: CheckEmailDto) {
+        return await this.userService.emailCheck(data);
     }
 
     // 닉네임 중복체크
     @Post('nickname/check')
-    nicknameCheck(@Body() data: CheckNicknameDto) {
-        return this.userService.nicknameCheck(data);
+    async nicknameCheck(@Body() data: CheckNicknameDto) {
+        return await this.userService.nicknameCheck(data);
+    }
+
+    // 회원 가입
+    @Post('signup')
+    async signUp(@Body() data: CreateUserDto) {
+        return await this.userService.createUser(data);
     }
 }

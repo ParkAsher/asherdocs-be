@@ -45,4 +45,20 @@ export class UserService {
 
         return true;
     }
+
+    async createUser(data: CreateUserDto) {
+        const { email, password, nickname } = data;
+
+        const hashedPassword = await bcrypt.hash(password, SALT);
+
+        const createdUser = await this.userRepository.save({
+            email,
+            password: hashedPassword,
+            nickname,
+        });
+
+        delete createdUser.password;
+
+        return createdUser;
+    }
 }
