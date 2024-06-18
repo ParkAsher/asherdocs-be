@@ -1,13 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { BusinessExceptionFilter } from './exceptions/Business.ExceptionFilter';
+import { CustomExceptionFilter } from './exceptions/Custom.ExceptionFilter';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
-    app.useGlobalFilters(new BusinessExceptionFilter());
+    app.useGlobalFilters(new CustomExceptionFilter());
 
     await app.listen(3000);
 }
