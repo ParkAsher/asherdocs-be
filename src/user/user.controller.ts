@@ -1,13 +1,26 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Inject,
+    Post,
+    Request,
+    UseGuards,
+    forwardRef,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { CheckEmailDto } from './dtos/check-email.dto';
 import { CheckNicknameDto } from './dtos/check-nickname.dto';
 import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) {}
+    constructor(
+        private readonly userService: UserService,
+        @Inject(forwardRef(() => AuthService))
+        private readonly authService: AuthService,
+    ) {}
 
     // 이메일 중복체크
     @Post('email/check')
@@ -31,6 +44,12 @@ export class UserController {
     @UseGuards(LocalAuthGuard)
     @Post('login')
     async login(@Request() req) {
-        console.log(req.user);
+        const user = req.user;
+
+        const { id, email, nickname } = user;
+
+        const accessToken = await this.authService.createAcessToken(user);
+
+        return { accessToken, nickname };
     }
 }
