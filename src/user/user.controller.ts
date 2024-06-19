@@ -1,8 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { CheckEmailDto } from './dtos/check-email.dto';
 import { CheckNicknameDto } from './dtos/check-nickname.dto';
+import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -24,5 +25,12 @@ export class UserController {
     @Post('signup')
     async signUp(@Body() data: CreateUserDto) {
         return await this.userService.createUser(data);
+    }
+
+    // 로그인
+    @UseGuards(LocalAuthGuard)
+    @Post('login')
+    async login(@Request() req) {
+        console.log(req.user);
     }
 }

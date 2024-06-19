@@ -61,4 +61,8 @@ export class UserService {
 
         return createdUser;
     }
+
+    async getUserByEmail(email: string) {
+        return await this.userRepository.findOneBy({ email });
+    }
 }

@@ -7,16 +7,16 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 
-@Catch(Error)
+@Catch(HttpException)
 export class CustomExceptionFilter implements ExceptionFilter {
     catch(exception: any, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const res = ctx.getResponse<Response>();
         const req = ctx.getRequest<Request>();
 
-        if (!(exception instanceof HttpException)) {
-            exception = new InternalServerErrorException();
-        }
+        // if (!(exception instanceof HttpException)) {
+        //     exception = new InternalServerErrorException();
+        // }
 
         const status = exception.getStatus();
         const response = exception.getResponse(); // 예외 응답 객체
@@ -28,6 +28,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
         };
 
         console.log(body);
+        console.log(exception.stack);
 
         res.status(status).json(body);
     }
