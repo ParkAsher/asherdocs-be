@@ -9,6 +9,12 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
     app.useGlobalFilters(new CustomExceptionFilter());
 
-    await app.listen(3000);
+    // CORS
+    app.enableCors({
+        origin: true,
+        credentials: true,
+    });
+
+    await app.listen(5000);
 }
 bootstrap();
