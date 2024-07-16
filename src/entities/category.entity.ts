@@ -2,9 +2,11 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import { Article } from './article.entity';
 
 @Entity()
 export class Category {
@@ -22,4 +24,10 @@ export class Category {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    // One to Many : category <-> article
+    @OneToMany(() => Article, (article) => article.category, {
+        cascade: true,
+    })
+    articles: Article[];
 }
