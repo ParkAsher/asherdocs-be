@@ -22,6 +22,9 @@ export class User {
     @Column({ type: 'varchar', unique: true })
     nickname: string;
 
+    @Column({ type: 'int', default: 2 })
+    role: number;
+
     @CreateDateColumn()
     createdAt: Date;
 
