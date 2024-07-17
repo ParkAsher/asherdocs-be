@@ -46,10 +46,10 @@ export class UserController {
     async login(@Request() req) {
         const user = req.user;
 
-        const { id, email, nickname } = user;
+        const { id, email, nickname, role } = user;
 
         const accessToken = await this.authService.createAcessToken(user);
 
-        return { accessToken, nickname };
+        return { accessToken, nickname, id, role };
     }
 }
