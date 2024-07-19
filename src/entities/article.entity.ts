@@ -23,4 +23,7 @@ export class Article {
         onDelete: 'CASCADE',
     })
     user: User;
+
+    @Column({ type: 'int', default: 0 })
+    views: number;
 }
