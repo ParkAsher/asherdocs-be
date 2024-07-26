@@ -1,4 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 import { Category } from './category.entity';
 import { User } from './user.entity';
 
@@ -10,20 +18,35 @@ export class Article {
     @Column({ type: 'varchar' })
     title: string;
 
-    // Many to One : article <-> category
-    @ManyToOne(() => Category, (category) => category.articles, {
-        onDelete: 'NO ACTION',
-    })
-    category: Category;
+    @Column({ type: 'int', nullable: false })
+    categoryId: number;
 
     @Column({ type: 'text' })
     content: string;
 
-    @ManyToOne(() => User, (user) => user.articles, {
-        onDelete: 'CASCADE',
-    })
-    user: User;
+    @Column({ type: 'uuid', nullable: false })
+    userId: string;
 
     @Column({ type: 'int', default: 0 })
     views: number;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    //---------------------------------------------------------
+
+    @ManyToOne(() => Category, (category) => category.articles, {
+        onDelete: 'NO ACTION',
+    })
+    @JoinColumn({ name: 'categoryId' })
+    category: Category;
+
+    @ManyToOne(() => User, (user) => user.articles, {
+        onDelete: 'CASCADE',
+    })
+    @JoinColumn({ name: 'userId' })
+    user: User;
 }
