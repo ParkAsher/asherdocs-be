@@ -8,6 +8,7 @@ import { LocalAuthStrategy } from './strategies/local-auth.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtConfigService } from 'src/_config/jwt.config.service';
+import { JwtStrategy } from './strategies/jwt-auth.strategy';
 
 @Module({
     imports: [
@@ -20,7 +21,7 @@ import { JwtConfigService } from 'src/_config/jwt.config.service';
             inject: [ConfigService],
         }),
     ],
-    providers: [AuthService, LocalAuthStrategy],
+    providers: [AuthService, LocalAuthStrategy, JwtStrategy],
     exports: [AuthService],
 })
 export class AuthModule {}
