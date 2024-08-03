@@ -5,6 +5,8 @@ import { DataSource, Repository } from 'typeorm';
 import { CreateArticleDto } from './dtos/create-article.dto';
 import { Category } from 'src/entities/category.entity';
 
+const ARTICLE_PER_PAGE = 5;
+
 @Injectable()
 export class ArticleService {
     constructor(
@@ -50,5 +52,40 @@ export class ArticleService {
             // 트랜잭션 종료 시 연결 종료.
             await queryRunner.release();
         }
+    }
+
+    async getArticles(category: string, page: number) {
+        const limit = ARTICLE_PER_PAGE;
+
+        if (category === 'undefined') {
+            return await this.getAllArticles(page, limit);
+        } else {
+            return await this.getArticlesWithCategory(category, page, limit);
+        }
+    }
+
+    async getArticlesWithCategory(
+        category: string,
+        page: number,
+        limit: number,
+    ) {
+        const categoryName = category;
+
+        return this.articleRepository
+            .createQueryBuilder('article')
+            .innerJoin('article.category', 'category')
+            .where('category.categoryName = :categoryName', { categoryName })
+            .orderBy('article.createdAt', 'DESC')
+            .take(limit)
+            .skip((page - 1) * limit)
+            .getMany();
+    }
+
+    async getAllArticles(page: number, limit: number) {
+        return this.articleRepository.find({
+            take: limit,
+            skip: (page - 1) * limit,
+            order: { createdAt: 'DESC' },
+        });
     }
 }
