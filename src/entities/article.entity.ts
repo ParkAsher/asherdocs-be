@@ -30,6 +30,9 @@ export class Article {
     @Column({ type: 'int', default: 0 })
     views: number;
 
+    @Column({ type: 'varchar' })
+    thumbnail: string;
+
     @CreateDateColumn()
     createdAt: Date;
 
