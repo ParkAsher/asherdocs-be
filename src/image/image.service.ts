@@ -20,7 +20,6 @@ export class ImageService {
 
     async thumbnailUpload(thumbnail: Express.Multer.File) {
         const bucket = this.configService.get<string>('NCP_BUCKET');
-        const region = this.configService.get<string>('NCP_REGION');
 
         const key = `thumbnail/${Date.now().toString()}-${thumbnail.originalname}`;
 
@@ -34,7 +33,7 @@ export class ImageService {
         await this.s3Client.send(command);
 
         return {
-            path: `https://${bucket}.s3.${region}.ncloudstorage.com/${key}`,
+            path: `https://kr.object.ncloudstorage.com/${bucket}/${key}`,
         };
     }
 }
