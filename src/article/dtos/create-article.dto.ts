@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateArticleDto {
     @IsNotEmpty()
@@ -12,4 +12,7 @@ export class CreateArticleDto {
 
     @IsNotEmpty()
     userId: string;
+
+    @IsString()
+    thumbnail: string;
 }

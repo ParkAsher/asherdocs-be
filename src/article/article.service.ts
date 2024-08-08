@@ -18,7 +18,7 @@ export class ArticleService {
     ) {}
 
     async createArticle(data: CreateArticleDto) {
-        const { title, content, categoryId, userId } = data;
+        const { title, content, categoryId, userId, thumbnail } = data;
 
         const queryRunner = this.dataSource.createQueryRunner();
 
@@ -33,6 +33,7 @@ export class ArticleService {
                 content,
                 categoryId,
                 userId,
+                thumbnail,
             });
 
             // 카테고리 글 수 + 1

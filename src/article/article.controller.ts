@@ -11,6 +11,7 @@ export class ArticleController {
     @UseGuards(JwtAuthGuard)
     @Post('/')
     async createArticle(@Body() data: CreateArticleDto) {
+        console.log(data);
         return await this.articleService.createArticle(data);
     }
 
