@@ -74,6 +74,14 @@ export class ArticleService {
 
         return this.articleRepository
             .createQueryBuilder('article')
+            .select([
+                'article.id',
+                'article.title',
+                'article.thumbnail',
+                'article.createdAt',
+                'article.views',
+                'category.categoryName',
+            ])
             .innerJoin('article.category', 'category')
             .where('category.categoryName = :categoryName', { categoryName })
             .orderBy('article.createdAt', 'DESC')
@@ -84,6 +92,19 @@ export class ArticleService {
 
     async getAllArticles(page: number, limit: number) {
         return this.articleRepository.find({
+            relations: {
+                category: true,
+            },
+            select: {
+                id: true,
+                title: true,
+                thumbnail: true,
+                createdAt: true,
+                views: true,
+                category: {
+                    categoryName: true,
+                },
+            },
             take: limit,
             skip: (page - 1) * limit,
             order: { createdAt: 'DESC' },
