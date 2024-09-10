@@ -110,4 +110,25 @@ export class ArticleService {
             order: { createdAt: 'DESC' },
         });
     }
+
+    async getArticle(articleId: number) {
+        // 조회수 증가 (원자적 연산)
+        await this.updateViews(articleId);
+
+        const article = await this.articleRepository.findOne({
+            select: {
+                category: {
+                    categoryName: true,
+                },
+            },
+            where: { id: articleId },
+            relations: ['category'],
+        });
+
+        return article;
+    }
+
+    async updateViews(articleId: number) {
+        await this.articleRepository.increment({ id: articleId }, 'views', 1);
+    }
 }

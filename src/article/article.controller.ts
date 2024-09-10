@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Param,
+    Post,
+    Query,
+    UseGuards,
+} from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dtos/create-article.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -15,12 +23,18 @@ export class ArticleController {
         return await this.articleService.createArticle(data);
     }
 
-    // 글 가져오기
+    // 글 목록 가져오기
     @Get()
     async getArticles(
         @Query('page') page: number,
         @Query('category') category: string,
     ) {
         return await this.articleService.getArticles(category, page);
+    }
+
+    // 글 상세 가져오기
+    @Get(':id')
+    async getArticle(@Param('id') articleId: number) {
+        return await this.articleService.getArticle(articleId);
     }
 }
