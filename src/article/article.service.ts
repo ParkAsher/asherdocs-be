@@ -4,6 +4,7 @@ import { Article } from 'src/entities/article.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateArticleDto } from './dtos/create-article.dto';
 import { Category } from 'src/entities/category.entity';
+import { EditArticleDto } from './dtos/edit-article.dto';
 
 const ARTICLE_PER_PAGE = 5;
 
@@ -118,6 +119,7 @@ export class ArticleService {
         const article = await this.articleRepository.findOne({
             select: {
                 category: {
+                    id: true,
                     categoryName: true,
                 },
             },
@@ -130,6 +132,10 @@ export class ArticleService {
 
     async deleteArticle(articleId: number) {
         return this.articleRepository.delete(articleId);
+    }
+
+    async editArticle(articleId: number, data: EditArticleDto) {
+        return this.articleRepository.update(articleId, data);
     }
 
     async updateViews(articleId: number) {

@@ -5,12 +5,14 @@ import {
     Get,
     Param,
     Post,
+    Put,
     Query,
     UseGuards,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dtos/create-article.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { EditArticleDto } from './dtos/edit-article.dto';
 
 @Controller('article')
 export class ArticleController {
@@ -43,5 +45,14 @@ export class ArticleController {
     @Delete(':id')
     async deleteArticle(@Param('id') articleId: number) {
         return await this.articleService.deleteArticle(articleId);
+    }
+
+    // 글 수정
+    @Put(':id')
+    async editArticle(
+        @Param('id') articleId: number,
+        @Body() data: EditArticleDto,
+    ) {
+        return await this.articleService.editArticle(articleId, data);
     }
 }
