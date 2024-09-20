@@ -131,7 +131,38 @@ export class ArticleService {
     }
 
     async deleteArticle(articleId: number) {
-        return this.articleRepository.delete(articleId);
+        const queryRunner = this.dataSource.createQueryRunner();
+
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+            /* 비즈니스 로직 */
+
+            // 글 카테고리 정보 가져오기
+            const { category } = await this.getArticle(articleId);
+            const { id: categoryId } = category;
+
+            // 글 삭제
+            await this.articleRepository.delete(articleId);
+
+            // 카테고리 글 수 - 1
+            await this.categoryRepository.decrement(
+                { id: categoryId },
+                'contentsCount',
+                1,
+            );
+
+            // 커밋
+            await queryRunner.commitTransaction();
+        } catch (error) {
+            // 트랜잭션 실패 시 롤백.
+            console.log(error);
+            await queryRunner.rollbackTransaction();
+        } finally {
+            // 트랜잭션 종료 시 연결 종료.
+            await queryRunner.release();
+        }
     }
 
     async editArticle(articleId: number, data: EditArticleDto) {
