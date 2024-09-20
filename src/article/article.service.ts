@@ -128,6 +128,10 @@ export class ArticleService {
         return article;
     }
 
+    async deleteArticle(articleId: number) {
+        return this.articleRepository.delete(articleId);
+    }
+
     async updateViews(articleId: number) {
         await this.articleRepository.increment({ id: articleId }, 'views', 1);
     }

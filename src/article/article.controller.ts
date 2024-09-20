@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     Post,
@@ -36,5 +37,11 @@ export class ArticleController {
     @Get(':id')
     async getArticle(@Param('id') articleId: number) {
         return await this.articleService.getArticle(articleId);
+    }
+
+    // 글 삭제
+    @Delete(':id')
+    async deleteArticle(@Param('id') articleId: number) {
+        return await this.articleService.deleteArticle(articleId);
     }
 }
