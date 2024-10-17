@@ -12,7 +12,7 @@ async function bootstrap() {
     // CORS
     app.enableCors({
         origin: [
-            'https://www.asherdocs.com/',
+            'https://www.asherdocs.com',
             'https://asherdocs-fe.vercel.app',
             'https://asherdocs-fe-git-master-ashers-projects-3c584865.vercel.app',
             'https://asherdocs-wfega4m1m-ashers-projects-3c584865.vercel.app',
