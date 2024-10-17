@@ -172,4 +172,28 @@ export class ArticleService {
     async updateViews(articleId: number) {
         await this.articleRepository.increment({ id: articleId }, 'views', 1);
     }
+
+    async getSearchArticle(keyword: string, page: number) {
+        const limit = ARTICLE_PER_PAGE;
+
+        return await this.articleRepository
+            .createQueryBuilder('article')
+            .select([
+                'article.id',
+                'article.title',
+                'article.thumbnail',
+                'article.createdAt',
+                'article.views',
+                'category.categoryName',
+            ])
+            .innerJoin('article.category', 'category')
+            .where(
+                'article.title LIKE :keyword OR article.content LIKE :keyword',
+                { keyword: `%${keyword}%` },
+            )
+            .orderBy('article.createdAt', 'DESC')
+            .take(limit)
+            .skip((page - 1) * limit)
+            .getMany();
+    }
 }

@@ -26,6 +26,16 @@ export class ArticleController {
         return await this.articleService.createArticle(data);
     }
 
+    // 글 검색
+    @Get('search')
+    async getSearchArticles(
+        @Query('page') page: number,
+        @Query('keyword') keyword: string,
+    ) {
+        console.log(keyword, page);
+        return await this.articleService.getSearchArticle(keyword, page);
+    }
+
     // 글 목록 가져오기
     @Get()
     async getArticles(
