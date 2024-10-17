@@ -16,6 +16,7 @@ async function bootstrap() {
             'http://localhost:3000/',
             'https://web-asherdocs-fe-lxcs5vq293f388aa.sel5.cloudtype.app/',
         ],
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true,
     });
 
