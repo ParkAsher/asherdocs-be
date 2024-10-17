@@ -1,0 +1,55 @@
+name: Deploy to cloudtype
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Connect deploy key
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Deploy
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: devasherpark/asherdocs
+          stage: main
+          yaml: |
+            name: asherdocs-be
+            app: node@22
+            options:
+              ports: ""
+              env:
+                - name: DB_HOST
+                  secret: DB_HOST
+                - name: DB_PORT
+                  secret: DB_PORT
+                - name: DB_USERNAME
+                  secret: DB_USERNAME
+                - name: DB_PASSWORD
+                  secret: DB_PASSWORD
+                - name: DB_DATABASE
+                  secret: DB_DATABASE
+                - name: JWT_SECRET
+                  secret: JWT_SECRET
+                - name: NCP_ACCESS_KEY
+                  secret: NCP_ACCESS_KEY
+                - name: NCP_SECRET_KEY
+                  secret: NCP_SECRET_KEY
+                - name: NCP_REGION
+                  secret: NCP_REGION
+                - name: NCP_ENDPOINT
+                  secret: NCP_ENDPOINT
+                - name: NCP_BUCKET
+                  secret: NCP_BUCKET
+              buildenv: []
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
