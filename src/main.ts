@@ -13,10 +13,12 @@ async function bootstrap() {
     app.enableCors({
         origin: [
             'https://asherdocs-fe.vercel.app/',
+            'asherdocs-fe-git-master-ashers-projects-3c584865.vercel.app',
+            'asherdocs-wfega4m1m-ashers-projects-3c584865.vercel.app',
             'http://localhost:3000/',
             'https://web-asherdocs-fe-lxcs5vq293f388aa.sel5.cloudtype.app/',
         ],
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         credentials: true,
     });
 
