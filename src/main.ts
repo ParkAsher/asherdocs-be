@@ -11,7 +11,11 @@ async function bootstrap() {
 
     // CORS
     app.enableCors({
-        origin: true,
+        origin: [
+            'https://asherdocs-fe.vercel.app/',
+            'http://localhost:3000/',
+            'https://web-asherdocs-fe-lxcs5vq293f388aa.sel5.cloudtype.app/',
+        ],
         credentials: true,
     });
 
