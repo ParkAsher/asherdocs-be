@@ -7,6 +7,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { Article } from './article.entity';
+import { Comment } from './comment.entity';
 
 @Entity()
 export class User {
@@ -31,8 +32,15 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    //---------------------------------------------------------
+
     @OneToMany(() => Article, (article) => article.user, {
         cascade: true,
     })
     articles: Article[];
+
+    @OneToMany(() => Comment, (comment) => comment.user, {
+        cascade: true,
+    })
+    comments: Comment[];
 }

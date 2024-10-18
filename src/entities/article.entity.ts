@@ -4,11 +4,13 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { User } from './user.entity';
+import { Comment } from './comment.entity';
 
 @Entity()
 export class Article {
@@ -52,4 +54,9 @@ export class Article {
     })
     @JoinColumn({ name: 'userId' })
     user: User;
+
+    @OneToMany(() => Comment, (comment) => comment.article, {
+        cascade: true,
+    })
+    comments: Comment[];
 }
