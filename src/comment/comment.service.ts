@@ -14,4 +14,8 @@ export class CommentService {
     async createComment(data: CreateCommentDto) {
         return await this.commentRepository.save(data);
     }
+
+    async deleteComment(id: number) {
+        return await this.commentRepository.delete(id);
+    }
 }
