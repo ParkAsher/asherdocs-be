@@ -2,9 +2,11 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     Param,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
@@ -32,5 +34,10 @@ export class CommentController {
     @Patch(':id')
     async editComment(@Param('id') id: number, @Body() data: EditCommentDto) {
         return await this.commentService.editComment(id, data);
+    }
+
+    @Get(':id')
+    async getComments(@Param('id') id: number, @Query('page') page: number) {
+        return await this.commentService.getComments(id, page);
     }
 }

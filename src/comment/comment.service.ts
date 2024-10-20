@@ -23,4 +23,24 @@ export class CommentService {
     async editComment(id: number, data: EditCommentDto) {
         return await this.commentRepository.update(id, data);
     }
+
+    async getComments(id: number, page: number) {
+        const limit = 5;
+
+        return await this.commentRepository
+            .createQueryBuilder('comment')
+            .select([
+                'comment.id',
+                'comment.comment',
+                'comment.createdAt',
+                'user.id',
+                'user.nickname',
+            ])
+            .innerJoin('comment.user', 'user')
+            .where('comment.articleId = :id', { id })
+            .orderBy('comment.createdAt', 'DESC')
+            .take(limit)
+            .skip((page - 1) * limit)
+            .getMany();
+    }
 }
