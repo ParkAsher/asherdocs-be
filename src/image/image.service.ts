@@ -1,7 +1,7 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import sharp from 'sharp';
+import * as Sharp from 'sharp';
 
 @Injectable()
 export class ImageService {
@@ -23,7 +23,7 @@ export class ImageService {
         const bucket = this.configService.get<string>('NCP_BUCKET');
 
         // resize
-        const resizedImageBuffer = await sharp(thumbnail.buffer)
+        const resizedImageBuffer = await Sharp(thumbnail.buffer)
             .resize(800, 500)
             .toBuffer();
 
