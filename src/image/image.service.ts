@@ -1,6 +1,7 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import sharp from 'sharp';
 
 @Injectable()
 export class ImageService {
@@ -21,12 +22,17 @@ export class ImageService {
     async thumbnailUpload(thumbnail: Express.Multer.File) {
         const bucket = this.configService.get<string>('NCP_BUCKET');
 
+        // resize
+        const resizedImageBuffer = await sharp(thumbnail.buffer)
+            .resize(800, 500)
+            .toBuffer();
+
         const key = `thumbnail/${Date.now().toString()}-${thumbnail.originalname}`;
 
         const command = new PutObjectCommand({
             Bucket: bucket,
             Key: key,
-            Body: thumbnail.buffer,
+            Body: resizedImageBuffer,
             ACL: 'public-read-write',
         });
 

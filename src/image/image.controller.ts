@@ -13,7 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class ImageController {
     constructor(private readonly imageService: ImageService) {}
 
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Post('thumbnail/upload')
     @UseInterceptors(FileInterceptor('thumbnail'))
     async thumbnailUpload(@UploadedFile() thumbnail: Express.Multer.File) {
