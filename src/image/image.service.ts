@@ -22,17 +22,23 @@ export class ImageService {
     async thumbnailUpload(thumbnail: Express.Multer.File) {
         const bucket = this.configService.get<string>('NCP_BUCKET');
 
-        // resize
-        const resizedImageBuffer = await Sharp(thumbnail.buffer)
-            .resize(800, 500)
-            .toBuffer();
+        // 이미지 메타데이터 가져오기 (크기 정보 포함)
+        const imageMetadata = await Sharp(thumbnail.buffer).metadata();
+        let imageBuffer = thumbnail.buffer;
+
+        // 이미지가 800 x 500 보다 클 때만 리사이즈
+        if (imageMetadata.width > 800 || imageMetadata.height > 500) {
+            imageBuffer = await Sharp(thumbnail.buffer)
+                .resize(800, 500, { fit: 'inside' })
+                .toBuffer();
+        }
 
         const key = `thumbnail/${Date.now().toString()}-${thumbnail.originalname}`;
 
         const command = new PutObjectCommand({
             Bucket: bucket,
             Key: key,
-            Body: resizedImageBuffer,
+            Body: imageBuffer,
             ACL: 'public-read-write',
         });
 
