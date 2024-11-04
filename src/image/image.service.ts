@@ -48,4 +48,23 @@ export class ImageService {
             path: `https://kr.object.ncloudstorage.com/${bucket}/${key}`,
         };
     }
+
+    async imageUpload(image: Express.Multer.File) {
+        const bucket = this.configService.get<string>('NCP_BUCKET');
+
+        const key = `article/${Date.now().toString()}-${image.originalname}`;
+
+        const commend = new PutObjectCommand({
+            Bucket: bucket,
+            Key: key,
+            Body: image.buffer,
+            ACL: 'public-read-write',
+        });
+
+        await this.s3Client.send(commend);
+
+        return {
+            path: `https://kr.object.ncloudstorage.com/${bucket}/${key}`,
+        };
+    }
 }
