@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Article } from './article.entity';
 import { Comment } from './comment.entity';
+import { Notification } from './notification.entity';
 
 @Entity()
 export class User {
@@ -43,4 +44,14 @@ export class User {
         cascade: true,
     })
     comments: Comment[];
+
+    @OneToMany(() => Notification, (notification) => notification.sender, {
+        cascade: true,
+    })
+    sentNotifications: Notification[];
+
+    @OneToMany(() => Notification, (notification) => notification.receiver, {
+        cascade: true,
+    })
+    receivedNotifications: Notification[];
 }

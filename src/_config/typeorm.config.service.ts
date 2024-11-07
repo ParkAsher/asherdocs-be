@@ -4,6 +4,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { Article } from 'src/entities/article.entity';
 import { Category } from 'src/entities/category.entity';
 import { Comment } from 'src/entities/comment.entity';
+import { Notification } from 'src/entities/notification.entity';
 import { User } from 'src/entities/user.entity';
 
 @Injectable()
@@ -20,7 +21,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             username: this.configService.get<string>('DB_USERNAME'),
             password: this.configService.get<string>('DB_PASSWORD'),
             database: this.configService.get<string>('DB_DATABASE'),
-            entities: [User, Category, Article, Comment],
+            entities: [User, Category, Article, Comment, Notification],
             synchronize: true,
             logging: true,
             autoLoadEntities: true,

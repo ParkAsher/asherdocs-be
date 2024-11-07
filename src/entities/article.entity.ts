@@ -11,6 +11,7 @@ import {
 import { Category } from './category.entity';
 import { User } from './user.entity';
 import { Comment } from './comment.entity';
+import { Notification } from './notification.entity';
 
 @Entity()
 export class Article {
@@ -59,4 +60,9 @@ export class Article {
         cascade: true,
     })
     comments: Comment[];
+
+    @OneToMany(() => Notification, (notification) => notification.article, {
+        cascade: true,
+    })
+    notifications: Notification[];
 }
