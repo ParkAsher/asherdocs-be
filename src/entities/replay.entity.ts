@@ -21,6 +21,9 @@ export class Reply {
     @Column({ type: 'int', nullable: false })
     commentId: number;
 
+    @Column({ type: 'text', nullable: false })
+    reply: string;
+
     @CreateDateColumn()
     createdAt: Date;
 
