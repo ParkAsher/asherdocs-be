@@ -20,14 +20,14 @@ export class Notification {
     senderId: string;
 
     // 알림 수신자
-    @Column({ type: 'uuid', nullable: false })
-    receiverId: string;
+    @Column({ type: 'uuid', nullable: true })
+    receiverId: string | null;
 
     // 댓글이 달린 글
     @Column({ type: 'int', nullable: false })
     articleId: number;
 
-    @Column({ type: 'boolean' })
+    @Column({ type: 'boolean', default: false })
     isRead: boolean;
 
     @Column({ type: 'varchar' })

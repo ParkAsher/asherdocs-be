@@ -5,6 +5,7 @@ import { Article } from 'src/entities/article.entity';
 import { Category } from 'src/entities/category.entity';
 import { Comment } from 'src/entities/comment.entity';
 import { Notification } from 'src/entities/notification.entity';
+import { Reply } from 'src/entities/replay.entity';
 import { User } from 'src/entities/user.entity';
 
 @Injectable()
@@ -21,7 +22,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             username: this.configService.get<string>('DB_USERNAME'),
             password: this.configService.get<string>('DB_PASSWORD'),
             database: this.configService.get<string>('DB_DATABASE'),
-            entities: [User, Category, Article, Comment, Notification],
+            entities: [User, Category, Article, Comment, Notification, Reply],
             synchronize: true,
             logging: true,
             autoLoadEntities: true,

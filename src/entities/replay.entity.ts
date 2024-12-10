@@ -4,16 +4,14 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { Article } from './article.entity';
-import { Reply } from './replay.entity';
+import { Comment } from './comment.entity';
 
 @Entity()
-export class Comment {
+export class Reply {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -21,10 +19,7 @@ export class Comment {
     userId: string;
 
     @Column({ type: 'int', nullable: false })
-    articleId: number;
-
-    @Column({ type: 'text', nullable: false })
-    comment: string;
+    commentId: number;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -40,14 +35,9 @@ export class Comment {
     @JoinColumn({ name: 'userId' })
     user: User;
 
-    @ManyToOne(() => Article, (article) => article.comments, {
+    @ManyToOne(() => Comment, (comment) => comment.replies, {
         onDelete: 'CASCADE',
     })
-    @JoinColumn({ name: 'articleId' })
-    article: Article;
-
-    @OneToMany(() => Reply, (reply) => reply.user, {
-        cascade: true,
-    })
-    replies: Reply[];
+    @JoinColumn({ name: 'commentId' })
+    comment: Comment;
 }

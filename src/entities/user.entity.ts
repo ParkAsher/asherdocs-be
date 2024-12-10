@@ -9,6 +9,7 @@ import {
 import { Article } from './article.entity';
 import { Comment } from './comment.entity';
 import { Notification } from './notification.entity';
+import { Reply } from './replay.entity';
 
 @Entity()
 export class User {
@@ -44,6 +45,11 @@ export class User {
         cascade: true,
     })
     comments: Comment[];
+
+    @OneToMany(() => Reply, (reply) => reply.user, {
+        cascade: true,
+    })
+    replies: Reply[];
 
     @OneToMany(() => Notification, (notification) => notification.sender, {
         cascade: true,
