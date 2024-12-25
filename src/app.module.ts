@@ -10,6 +10,7 @@ import { CategoryModule } from './category/category.module';
 import { ArticleModule } from './article/article.module';
 import { ImageModule } from './image/image.module';
 import { CommentModule } from './comment/comment.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
     imports: [
@@ -25,6 +26,7 @@ import { CommentModule } from './comment/comment.module';
         ArticleModule,
         ImageModule,
         CommentModule,
+        NotificationModule,
     ],
     controllers: [AppController],
     providers: [AppService],
