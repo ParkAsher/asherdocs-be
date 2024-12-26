@@ -25,4 +25,12 @@ export class NotificationService {
 
         return notification;
     }
+
+    async getHasNewNotifications(id: string) {
+        const count = await this.notificationRepository.count({
+            where: { receiverId: id, isRead: false },
+        });
+
+        return { count, hasNewNotifications: count > 0 };
+    }
 }
