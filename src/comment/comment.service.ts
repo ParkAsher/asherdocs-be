@@ -32,15 +32,18 @@ export class CommentService {
             comment,
         });
 
-        const message = `${senderNickname} 님이 회원님의 글에 댓글을 작성했습니다.`;
+        // 글 작성자와 본인이 같지 않을 때
+        if (!(userId === receiverId)) {
+            const message = `${senderNickname} 님이 회원님의 글에 댓글을 작성했습니다.`;
 
-        // 알림 저장
-        await this.notificationService.createNotification(
-            articleId,
-            userId,
-            receiverId,
-            message,
-        );
+            // 알림 저장
+            await this.notificationService.createNotification(
+                articleId,
+                userId,
+                receiverId,
+                message,
+            );
+        }
 
         return savedComment;
     }
