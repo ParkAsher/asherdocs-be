@@ -26,6 +26,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             synchronize: true,
             logging: true,
             autoLoadEntities: true,
+            timezone: 'Z',
         };
     }
 }
