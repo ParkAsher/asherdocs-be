@@ -13,7 +13,7 @@ import { Article } from './article.entity';
 @Entity()
 export class Notification {
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
     // 댓글 작성자
     @Column({ type: 'uuid', nullable: false })
@@ -34,10 +34,10 @@ export class Notification {
     message: string;
 
     @CreateDateColumn()
-    createdAt: null;
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: null;
+    updatedAt: Date;
 
     //---------------------------------------------------------
 
