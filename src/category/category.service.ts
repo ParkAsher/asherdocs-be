@@ -11,6 +11,8 @@ export class CategoryService {
     ) {}
 
     async getCategories() {
-        return await this.categoryRepository.find();
+        return await this.categoryRepository.find({
+            order: { categoryNumber: 'ASC' },
+        });
     }
 }
