@@ -27,9 +27,9 @@ export class ImageService {
         let imageBuffer = thumbnail.buffer;
 
         // 이미지가 800 x 500 이 아닐 때
-        if (!(imageMetadata.width === 800) || !(imageMetadata.height === 500)) {
+        if (!(imageMetadata.width === 800 && imageMetadata.height === 500)) {
             imageBuffer = await Sharp(thumbnail.buffer)
-                .resize(800, 500, { fit: 'inside' })
+                .resize(800, 500, { fit: 'cover' })
                 .toBuffer();
         }
 
