@@ -13,6 +13,9 @@ export class Category {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ type: 'int', nullable: false, unique: true })
+    categoryNumber: number;
+
     @Column({ type: 'varchar', unique: true })
     categoryName: string;
 
