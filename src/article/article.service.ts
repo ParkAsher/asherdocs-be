@@ -181,8 +181,8 @@ export class ArticleService {
         if (!article) throw new NotFoundException('게시글을 찾을 수 없습니다.');
 
         // 제목 수정 시 slug 수정
-        if (data.title) {
-            const newSlug = await generateSlug(data.title);
+        if (data.title !== article.title) {
+            const newSlug = await generateSlug(data.title, article.createdAt);
 
             article.slug = newSlug;
         }
