@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from 'src/entities/article.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateArticleDto } from './dtos/create-article.dto';
 import { Category } from 'src/entities/category.entity';
 import { EditArticleDto } from './dtos/edit-article.dto';
+import { generateSlug } from 'src/utils/slug';
 
 const ARTICLE_PER_PAGE = 5;
 
@@ -28,6 +29,10 @@ export class ArticleService {
 
         try {
             /* 비즈니스 로직 */
+
+            // Slug 생성
+            const slug = await generateSlug(title);
+
             // 글 저장
             await this.articleRepository.save({
                 title,
@@ -35,6 +40,7 @@ export class ArticleService {
                 categoryId,
                 userId,
                 thumbnail,
+                slug,
             });
 
             // 카테고리 글 수 + 1
@@ -81,6 +87,7 @@ export class ArticleService {
                 'article.thumbnail',
                 'article.createdAt',
                 'article.views',
+                'article.slug',
                 'category.categoryName',
             ])
             .innerJoin('article.category', 'category')
@@ -102,6 +109,7 @@ export class ArticleService {
                 thumbnail: true,
                 createdAt: true,
                 views: true,
+                slug: true,
                 category: {
                     categoryName: true,
                 },
@@ -112,9 +120,9 @@ export class ArticleService {
         });
     }
 
-    async getArticle(articleId: number) {
+    async getArticle(slug: string) {
         // 조회수 증가 (원자적 연산)
-        await this.updateViews(articleId);
+        await this.updateViews(slug);
 
         const article = await this.articleRepository.findOne({
             select: {
@@ -123,14 +131,14 @@ export class ArticleService {
                     categoryName: true,
                 },
             },
-            where: { id: articleId },
+            where: { slug },
             relations: ['category'],
         });
 
         return article;
     }
 
-    async deleteArticle(articleId: number) {
+    async deleteArticle(slug: string) {
         const queryRunner = this.dataSource.createQueryRunner();
 
         await queryRunner.connect();
@@ -140,11 +148,11 @@ export class ArticleService {
             /* 비즈니스 로직 */
 
             // 글 카테고리 정보 가져오기
-            const { category } = await this.getArticle(articleId);
+            const { category } = await this.getArticle(slug);
             const { id: categoryId } = category;
 
             // 글 삭제
-            await this.articleRepository.delete(articleId);
+            await this.articleRepository.delete({ slug });
 
             // 카테고리 글 수 - 1
             await this.categoryRepository.decrement(
@@ -165,12 +173,28 @@ export class ArticleService {
         }
     }
 
-    async editArticle(articleId: number, data: EditArticleDto) {
-        return this.articleRepository.update(articleId, data);
+    async editArticle(slug: string, data: EditArticleDto) {
+        const article = await this.articleRepository.findOne({
+            where: { slug },
+        });
+
+        if (!article) throw new NotFoundException('게시글을 찾을 수 없습니다.');
+
+        // 제목 수정 시 slug 수정
+        if (data.title) {
+            const newSlug = await generateSlug(data.title);
+
+            article.slug = newSlug;
+        }
+
+        // 수정된 데이터를 엔티티에 반영
+        Object.assign(article, data);
+
+        return this.articleRepository.save(article);
     }
 
-    async updateViews(articleId: number) {
-        await this.articleRepository.increment({ id: articleId }, 'views', 1);
+    async updateViews(slug: string) {
+        await this.articleRepository.increment({ slug }, 'views', 1);
     }
 
     async getSearchArticle(keyword: string, page: number) {
@@ -184,6 +208,7 @@ export class ArticleService {
                 'article.thumbnail',
                 'article.createdAt',
                 'article.views',
+                'article.slug',
                 'category.categoryName',
             ])
             .innerJoin('article.category', 'category')

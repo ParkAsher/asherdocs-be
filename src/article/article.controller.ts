@@ -46,23 +46,23 @@ export class ArticleController {
     }
 
     // 글 상세 가져오기
-    @Get(':id')
-    async getArticle(@Param('id') articleId: number) {
-        return await this.articleService.getArticle(articleId);
+    @Get(':slug')
+    async getArticle(@Param('slug') slug: string) {
+        return await this.articleService.getArticle(slug);
     }
 
     // 글 삭제
-    @Delete(':id')
-    async deleteArticle(@Param('id') articleId: number) {
-        return await this.articleService.deleteArticle(articleId);
+    @Delete(':slug')
+    async deleteArticle(@Param('slug') slug: string) {
+        return await this.articleService.deleteArticle(slug);
     }
 
     // 글 수정
-    @Put(':id')
+    @Put(':slug')
     async editArticle(
-        @Param('id') articleId: number,
+        @Param('slug') slug: string,
         @Body() data: EditArticleDto,
     ) {
-        return await this.articleService.editArticle(articleId, data);
+        return await this.articleService.editArticle(slug, data);
     }
 }

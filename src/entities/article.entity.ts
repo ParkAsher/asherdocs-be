@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     JoinColumn,
     ManyToOne,
     OneToMany,
@@ -35,6 +36,10 @@ export class Article {
 
     @Column({ type: 'varchar' })
     thumbnail: string;
+
+    @Index()
+    @Column({ unique: true, nullable: true })
+    slug: string;
 
     @CreateDateColumn()
     createdAt: Date;
